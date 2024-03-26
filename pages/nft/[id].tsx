@@ -21,10 +21,7 @@ const NFTDropPage = () => {
   const connectToWallet = async () => {
     try {
       setIsLoading(true);
-      const wallet = await connect(metamaskConfig, {
-        projectId: "test",
-        qrcode: true,
-      });
+      const wallet = await connect(metamaskConfig, {});
       console.log("connected to ", wallet);
     } catch (e) {
       console.log(e);
