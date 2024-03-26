@@ -1,6 +1,37 @@
-import React from "react";
+import React, { useState } from "react";
+import {
+  ConnectWallet,
+  useAddress,
+  useDisconnect,
+  useMetamask,
+  useConnect,
+  metamaskWallet,
+} from "@thirdweb-dev/react";
+
+const metamaskConfig = metamaskWallet();
 
 const NFTDropPage = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const address = useAddress();
+  const connect = useConnect();
+  const disconnect = useDisconnect();
+
+  console.log("address", address);
+
+  const connectToWallet = async () => {
+    try {
+      setIsLoading(true);
+      const wallet = await connect(metamaskConfig, {
+        projectId: "test",
+        qrcode: true,
+      });
+      console.log("connected to ", wallet);
+    } catch (e) {
+      console.log(e);
+    }
+    setIsLoading(false);
+  };
+
   return (
     <div className="flex h-screen flex-col lg:grid  lg:grid-cols-10 ">
       {/* Left */}
@@ -35,12 +66,23 @@ const NFTDropPage = () => {
             NFT Market Place
           </h1>
 
-          <button className="rounded-full bg-rose-400 text-white px-4 py-2 text-xs font-bold lg:px-5 lg:py-3 lg:text-base">
-            Sign In
+          <button
+            onClick={address ? disconnect : connectToWallet}
+            className="rounded-full bg-rose-400 text-white px-4 py-2 text-xs font-bold lg:px-5 lg:py-3 lg:text-base"
+            disabled={isLoading}
+          >
+            {address ? "Sign out" : "Sign In"}
           </button>
         </header>
 
         <hr className="my-2 border" />
+
+        {address && (
+          <p className="text-center text-sm text-rose-400">
+            You're logged in with wallet {address.substring(0, 5)}...
+            {address.substring(address.length - 5)}
+          </p>
+        )}
 
         {/* Content */}
         <div className="mt-10 flex-1 flex flex-col items-center space-y-6 text-center lg:space-y-0 lg:justify-center">
