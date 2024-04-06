@@ -20,6 +20,7 @@ export interface Collection {
   title: string;
   address: string;
   description: string;
+  nftCollectionName: string;
   mainImage: Image;
   previewImage: Image;
   slug: {
